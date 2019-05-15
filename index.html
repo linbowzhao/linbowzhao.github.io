@@ -187,6 +187,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -300,130 +310,11 @@
       
         
           
-            <p>hexo写一下自己配置hexo时遇到的一些问题，持续更新</p>
+            <p>hexo写一下自己配置hexo时遇到的一些问题，持续更新<br>附上自己的配置文件<br><a href="/2019/05/15/hexo配置/config.html" title="_config.yml">_config.yml</a><br><a href="/2019/05/15/hexo配置/config_next.html" title="next_config.yml">next_config.yml</a></p>
 <p>1、配置next主题<br>自己先下载了next的主题到themes目录中，把hexo的_config.yml中的theme改成next，然后重新运行hexo server，结果出来了，是next主题，如果试了没有用的话。可能是缓存的原因，可以下了服务，运行hexo clean再重启一下服务。然后之后自己想换next主题中的Gemini主题，结果在根目录下的_config.yml查了半天都没有看见scheme(next使用手册上写的)配置字段，自己写上去scheme没用，后来才发现themes的next文件夹下也有_config.yml配置文件，在那里面配置scheme就好了。</p>
 <figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Schemes</span><br><span class="line">scheme: Gemini</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">#scheme: Gemini</span><br></pre></td></tr></table></figure>
 <p>2、图片、html等静态文件引用的配置<br>在md里引用的图片文件在生成博客文章后无法显示，这是需要打开本地静态资源引用的，否则就只能写绝对地址，post_asset_folder设置为true后就打开了本地的文件引用，引用方式如demo.md<br>打开后还需要配置url，不然就只能写绝对地址，如下，本地就写<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a> ，也可以上传到git，写上git io域名，考虑到速度问题，之后我可能会找cdn服务，到时候url换成对应的域名就好。<br><figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br><span class="line">url: http://localhost:4000/</span><br></pre></td></tr></table></figure><figure class="highlight plain"><figcaption><span>demo.md</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 引用的方式，&#123; %不需要中间空格，这里是为了不变成引用</span><br><span class="line">&#123; % asset_img demo.jpg %&#125;</span><br></pre></td></tr></table></figure>关于引用本地的html文件(即source下的静态html文件)，这里又遇到一个坑，就是hexo渲染机制会把source下的html，md等文件都当成文章渲染的模板，导致你的demo文件demo.html被渲染成一篇博文，查了一下有个配置可以解决这个问题(感觉应该默认开启这个配置的)，如下。这样配置后，source下的_post文件夹下所有的html文件就都不会被渲染了，匹配的表达式叫<a href="https://fis.baidu.com/fis3/docs/api/config-glob.html" target="_blank" rel="noopener">glob规则</a><br><figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip_render: _posts/&#123;*.html,**/*.html&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/05/14/table布局详解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Linbow">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Linbow'blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/14/table布局详解/" itemprop="url">table布局详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T20:57:01+08:00">
-                2019-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <a href="/2019/05/14/table布局详解/demo1.html" title="demo1.html">demo1.html</a>
+<p>2、hexo配置tags标签<br>hexo默认是没用tags标签页面的，如果你在_config.yml中打开了tag_dir: tags设置，页面也会多出一个tags的选项卡，但是点击后显示的是cannot GET，这是因为hexo默认没有tags页面，需要自己创建，自己导入页面模板(提供了默认的)<br>关于这个设置网上讲的其实都是对的，用的都是hexo new page tags解决的，不过他们没有讲清楚，容易让人误会，以为这是新建了一篇文章的操作，好吧，我自己是这么以为的，然后就把这个方法忽略掉，结果搜来搜去只有这个方法，试了一下明白new page新建的是一个页面而不是一篇文章。<br><figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tag_dir: tags</span><br></pre></td></tr></table></figure>如果你是next主题，那你还需要配置这个 tags: /tags/ || tags<br><figure class="highlight plain"><figcaption><span>themes/next/_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  archives: /archives/ || archive</span><br></pre></td></tr></table></figure>然后运行hexo new page ‘tags’, 这会在tags下生成tags目录，目录下面有一个index.md文件，这就是页面模板配置的文件了，改成<br><figure class="highlight plain"><figcaption><span>source/tags/index.md</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags                 # 页面标题</span><br><span class="line">date: 2019-05-15 14:32:12   # 页面创建时间</span><br><span class="line">type: &quot;tags&quot;                # 页面类型</span><br><span class="line">layout: &quot;page&quot;              # 页面渲染的模板，这里指定的是next主题的page模板，是themes/next/layoput/page.swig，你也可以自己写一个新的模板作为tags页面，页面模板选错会导致渲染错误</span><br><span class="line">---</span><br></pre></td></tr></table></figure>渲染后的标签页就是下面这个样子啦<br><img src="/2019/05/15/hexo配置/tags.png"></p>
 
           
         
@@ -628,7 +519,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -640,10 +531,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">3</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">tags</span>
-                
+                </a>
               </div>
             
 
