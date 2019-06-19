@@ -239,6 +239,147 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/06/19/相对稳定的浏览器指纹列表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linbow">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linbow'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/19/相对稳定的浏览器指纹列表/" itemprop="url">相对稳定的浏览器指纹列表</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-19T15:49:39+08:00">
+                2019-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、基本逻辑"><a href="#一、基本逻辑" class="headerlink" title="一、基本逻辑"></a>一、基本逻辑</h2><p>采集具有设备浏览器差异化特征并且用户无法更改的信息，生成用户设备浏览器独特的身份序列，即使用户删除保存的身份信息，重新生成的序列仍然一致，做到对用户进行个人浏览器级别的身份定位。<br>1、差异化<br>2、用户无法篡改<br>3、设备稳定性</p>
+<h2 id="二、基本指纹"><a href="#二、基本指纹" class="headerlink" title="二、基本指纹"></a>二、基本指纹</h2><p>1、userAgent: 浏览器用户信息<br>navigator.userAgent</p>
+<p>2、language: 浏览器语言<br>navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || options.NOT_AVAILABLE</p>
+<p>3、colorDepth: 设备色深<br>window.screen.colorDepth</p>
+<p>4、deviceMemory: 设备内存<br>navigator.deviceMemory</p>
+<p>5、hardwareConcurrency: 设备处理器数<br>navigator.hardwareConcurrency</p>
+<p>6、hardwareConcurrency: 设备处理器数<br>navigator.hardwareConcurrency</p>
+<p>7、timezone: 时区<br>window.Intl.DateTimeFormat().resolvedOptions().timeZone</p>
+<p>8、sessionStorage: 是否有sessionStorage功能<br>!!window.sessionStorage</p>
+<p>9、localStorage: 是否有localStorage功能<br>!!window.localStorage</p>
+<p>10、indexedDb: 是否有indexedDb功能<br>!!window.indexedDb</p>
+<p>11、platform: 运行系统平台</p>
+<p>12、webglVendorAndRenderer: webgl信息</p>
+<p>13、touchSupport: 多点触摸以及触摸响应判断</p>
+<h2 id="三、高级指纹"><a href="#三、高级指纹" class="headerlink" title="三、高级指纹"></a>三、高级指纹</h2><p>1、canvas: canvas指纹<br>利用不同设备不同浏览器在绘制同一张图像时候和差异化信息提取特征码。</p>
+<p>从根本上来说，每一种浏览器都会使用不同的图像处理引擎，不同的导出选项，不同的压缩等级，所以每一台电脑绘制出的图形都会有些许不同，这些图案可以被用来给用户设备分配特定编号（指纹），也就是说可以用来识别不同用户。</p>
+<p>不同的电脑，显卡，设备分辨率不一样，渲染出来的图片有差异化不足为奇。不同浏览器不同图像的处理引擎，渲染出来的图片不一样也是一样道理。需要注意的是，即使是同一型号的设备，同一个版本的浏览器，渲染出来的图片依旧是有差异化的，肉眼无法辨别罢了，网上数据显示，差异化达到99.4%。个人推测是显卡的特征信息被加入到了图片渲染的过程中，导致了图片细微的差异化信息。</p>
+<p>先用canvas生成一张多个半透明的不同颜色的圆交叉的图片，并在上面填充文本，转化成base64，作为生成指纹的种子。</p>
+<p>2、webgl:webgl指纹<br>原理和canvas类似，不同之处是渲染的图片不同，并且调用webgl的api渲染而成。渲染图片为渐变色3D立体图像，为了调用尽可能多的webgl api突出差异化，渲染出来的图片转化为base64，作为生成指纹的种子。</p>
+<p>3、audio:audio指纹<br>利用浏览器AudioContext的api OscillatorNode产生一个三角波，然后将波传Dynamics Compressor Node，一个调节声音的信号处理模块，产生压缩效果。 然后，经处理的音频信号通过Analyser Node转换为频率域。频域在不同的浏览器中是不同的，这个特征受浏览器的影响，不能完全反应出声卡的特征。频率和峰值的比，在浏览器之间是相对稳定的。因此，在频率和值的坐标系上创建一个间距很小的列表，并将峰值频率和峰值映射到相应的格子。 如果一个格子包含一个频率或值，我们将格子标记为1，否则为0，这样的格子列表用作跨浏览器特征。</p>
+<p>先用AudioContext.createOscillator 产生一个三角波，然后用 AudioContext.createDynamicsCompressor，调节声音的信号，然后把信号用renderedBuffer.getChannelData 转化为与通道关联的PCM数据，采集4500到5000段稳定的数据作为生成指纹的种子</p>
+<h2 id="四、指纹生成"><a href="#四、指纹生成" class="headerlink" title="四、指纹生成"></a>四、指纹生成</h2><p>得到以上生成指纹的种子后，全部拼接到一块，用Murmur哈希函数生成32位长度的指纹，不选用md5加密是因为这里不需要md5那样强度的非逆转加密，可以节省生成时间。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/06/11/js中-和-详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -774,7 +915,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
