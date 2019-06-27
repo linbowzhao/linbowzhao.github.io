@@ -249,6 +249,140 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/06/27/web开发安全/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linbow">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linbow'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/27/web开发安全/" itemprop="url">web开发安全</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-27T17:51:52+08:00">
+                2019-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、CSRF攻击-跨站请求伪造"><a href="#一、CSRF攻击-跨站请求伪造" class="headerlink" title="一、CSRF攻击(跨站请求伪造)"></a>一、CSRF攻击(跨站请求伪造)</h2><h5 id="1、CSRF原理"><a href="#1、CSRF原理" class="headerlink" title="1、CSRF原理"></a>1、CSRF原理</h5><p>跨站请求伪造（英语：Cross-site request forgery），也被称为 one-click attack 或者 session riding，通常缩写为 CSRF 或者 XSRF， 是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。<br>跟跨网站脚本（XSS）相比，XSS 利用的是用户对指定网站的信任，是在目标网站植入黑客的代码获取用户的重要信息或者执行恶意操作。<br>CSRF 利用的是网站对用户网页浏览器的信任，是利用用户的cookie等登录信息伪造合理的恶意请求来达到自己的目的，黑客中间无法得到用户信息，但是可以完成一次黑客想要达成的请求来获取利益（比如转账请求）。<br>[1] 用户在目标网站上登录过，目标网站存在CSRF漏洞<br>[2] 用户点击黑客构造过攻击链接或者页面跳转按钮，发送黑客构造的请求给目标服务器。</p>
+<h5 id="2、CSRF漏洞特征"><a href="#2、CSRF漏洞特征" class="headerlink" title="2、CSRF漏洞特征"></a>2、CSRF漏洞特征</h5><p>完全靠cookie识别用户，请求参数中没有身份识别的参数。</p>
+<h5 id="3、CSRF攻击类型"><a href="#3、CSRF攻击类型" class="headerlink" title="3、CSRF攻击类型"></a>3、CSRF攻击类型</h5><p>[1] GET型漏洞<br>GET类型漏洞是比较危险的，黑客只需要构造攻击链接即可，而且链接域名都是正确的目标网站，用户根据连接无法识别该攻击。<br>比如这个例子 <a href="http://zhifubao.com/pay?toAccount=lin&amp;amount=10000" target="_blank" rel="noopener">http://zhifubao.com/pay?toAccount=lin&amp;amount=10000</a><br>要是一个支付GET请求只需要转账用户的账号toAccount和金额amount，然后登录信息都是在请求的cookie里面取，那黑客就会构造上面这样的链接，用户点击了之后，会直接打开浏览器发出请求，用户要是之前在这个网站登录过，请求就会带上用户的cookie信息转账给黑客的目标账户了。<br>不过一般支付的接口都会比较小心，加的验证比较多，这种漏洞也会发生在其它地方，比如投票接口，点赞接口，收藏接口或者一些操作数据库的接口（被用来攻击用户恶意删除用户数据）。<br>GET类型的CSRF漏洞攻击成本非常低，应当注意。<br>[2] POST型漏洞<br>POST型漏洞是利用浏览器的表单提交完成的，表单提交其实是可以跳转到不同域名下的，相当于一次“POST类型的页面跳转”，浏览器的机制是跳转到新的页面，并立即执行一次POST请求。这也是有时候我们刷新页面会提示已经提交过的表单会重新提交的原因，即使url上没有任何参数，这在url上是看不出来区别的，打开http的请求头，我们才可以看到这和直接在浏览器输入请求有什么区别。<br>POST型CSRF攻击成本比GET型CSRF攻击成本稍高，因为黑客伪造的链接不是在同一个域名下的，是在黑客自己的域名下做的一次跳转，黑客无法直接通过链接发起目标请求，比如下面这个链接。<br><a href="http://local.gaeamobile.net:8001/linbowzhao.github.io/source/_drafts/web开发安全/CSRF.html" target="_blank" rel="noopener">http://local.gaeamobile.net:8001/linbowzhao.github.io/source/_drafts/web开发安全/CSRF.html</a><br><img src="/2019/06/27/web开发安全/img1.jpg"></p>
+<h5 id="3、CSRF攻击的防御"><a href="#3、CSRF攻击的防御" class="headerlink" title="3、CSRF攻击的防御"></a>3、CSRF攻击的防御</h5><p>[1] Token机制<br>既然黑客是利用浏览器的机制来自动带上用户的cookie信息，那我们不单独依赖cookie来识别用户信息即可，可以把用户表示通过参数传递，黑客没法获取到用户的cookie信息，就没法构造出有效的CSRF链接，但是cookie可被js读取的话又容易受到之前讲过的XSS攻击，个人觉得生成一套两个匹配的的标识，一个叫做token1吧保存在http only的cookie，一个token2保存在js可读取位置，所有的请求带上token2，服务端接收到请求之后比对token1和token2是否匹配，匹配接受请求。<br>这样的话既防御了XSS攻击获取cookie，又防御了CSRF攻击，个人觉得是比较好的解决办法。<br>[1] 验证HTTP Referer字段<br>它记录了该HTTP请求所在的地址，表示HTTP请求从那个页面发出的，验证该请求是从哪个页面发出的，黑客构造的链接会是从黑客的域名而不是目标网站的域名。<br>这个方法个人觉得不太好，稳定性不高<br>首先是GET请求的CSRF攻击链接，打个比方，如果是从qq发送的过来的链接或者用户复制粘贴打开的，这里的Referer字段是空的，我们没法验证从哪里跳转过来<br>第二是一些低级的浏览器比如 IE6可以通过某种方式篡改Referer的值，这就给了攻击者可乘之机<br>第三是有些用户认为这样会侵犯到他们自己的隐私权，特别是有些组织担心 Referer 值会把组织内网中的某些信息泄露到外网中。因此，用户自己可以设置浏览器使其在发送请求时不再提供 Referer<br>总之个人觉得Referer限制是个不太稳定的方法，容易误伤正常用户或者有漏网之鱼。<br>[3] 验证码验证<br>优点是安全性高，缺点是需要用户操作，不可能每个接口都添加验证码验证，用户体验不好。</p>
+<h2 id="二、JSONP劫持"><a href="#二、JSONP劫持" class="headerlink" title="二、JSONP劫持"></a>二、JSONP劫持</h2><p>JSONP的原理在这里就不介绍了，需要了解的自行百度。</p>
+<h5 id="1、JSONP劫持原理"><a href="#1、JSONP劫持原理" class="headerlink" title="1、JSONP劫持原理"></a>1、JSONP劫持原理</h5><p>当这个JSONP接口没有验证Referer头的时候,就存在JSONP劫持漏洞,即在任何域下都能窃取到传输的数据，黑客直接调用JSONP接口进行使用，获取用户信息和执行恶意操作。<br>JSONP其实也属于CSRF攻击的一种吧，都是被黑客用来伪造恶意请求，从而达到攻击目的。</p>
+<h5 id="2、JSONP劫持例子"><a href="#2、JSONP劫持例子" class="headerlink" title="2、JSONP劫持例子"></a>2、JSONP劫持例子</h5><p><a href="http://local.gaeamobile.net:8001/linbowzhao.github.io/source/_drafts/web开发安全/JSONP.html" target="_blank" rel="noopener">http://local.gaeamobile.net:8001/linbowzhao.github.io/source/_drafts/web开发安全/JSONP.html</a></p>
+<h5 id="3、JSONP劫持的防御"><a href="#3、JSONP劫持的防御" class="headerlink" title="3、JSONP劫持的防御"></a>3、JSONP劫持的防御</h5><p>因为JSONP属于CSRF攻击范围内，所以CSRF攻击的防御方式对JSONP劫持都适用，简单的方法是验证HTTP Referer字段，比较安全的方法是添加Token机制</p>
+<h5 id="4、JSONP-callback可定义导致的安全问题"><a href="#4、JSONP-callback可定义导致的安全问题" class="headerlink" title="4、JSONP callback可定义导致的安全问题"></a>4、JSONP callback可定义导致的安全问题</h5><p>callback可自定义的时候如果没有对定义的函数名进行过滤，还会导致xss攻击安全问题，例如下面这个链接<br><a href="http://local-api.gaeamobile.net:8888/user?callback=" target="_blank" rel="noopener">http://local-api.gaeamobile.net:8888/user?callback=</a>&lt; script&gt;alert(‘xss’)&lt;/ script&gt;<br>点开这个链接的时候，用户数据就被窃取去了，所以为了安全问题，还是用固定的callback函数。</p>
+<h2 id="三、cors漏洞"><a href="#三、cors漏洞" class="headerlink" title="三、cors漏洞"></a>三、cors漏洞</h2><p>跨源资源共享 (CORS) 定义了在一个域中加载的客户端 Web 应用程序与另一个域中的资源交互的方式,需要浏览器和服务器共同支持才能实现<br>cors关键的header配置有Access-Control-Allow-Origin和Access-Control-Allow-Credentials，这里大概讲一下cors配置</p>
+<h5 id="1、cors跨域"><a href="#1、cors跨域" class="headerlink" title="1、cors跨域"></a>1、cors跨域</h5><p>[1] cors跨域支持简单请求和复杂请求，简单请求<br>简单请求<br>HEAD<br>GET<br>POST</p>
+<p>HTTP头包含<br>Accept<br>Accept-Language<br>Content-Language<br>Last-Event-ID<br>Content-Type，但仅能是下列之一<br>application/x-www-form-urlencoded<br>multipart/form-data<br>text/plain</p>
+<p>复杂请求<br>不满足上述条件即为复杂请求<br>复杂请求会进行一次预请求，预检请求是一个用于校验服务器是否支持当前方法以及是否能够理解当前请求的一种请求，它区别于一般的请求，不由代码发起，而在必要的时候由浏览器自动发出。<br><img src="/2019/06/27/web开发安全/img2.jpg"><br>[2] cors开启后，如果只是简单设置Access-Control-Allow-Origin: ‘<em>‘请求能够成功，但是无法写入和读取cookie<br>[3] 如果要接口能够读取cookie，需要设置Access-Control-Allow-Origin: ‘需要跨域目标域名’（注意，这里无法设置成</em>，否则浏览器会认为不安全而拦截报错）<br>Access-Control-Allow-Credentials: true(设置了这个，Access-Control-Allow-Origin就不能设置成*)<br><img src="/2019/06/27/web开发安全/img3.jpg"><br>然后前端js要设置withCredentials: true<br>原生设置方式为xhr.withCredentials = true;<br>jq为xhrFields:{withCredentials: true}<br>[4]设置成功后，服务器设置cookie和读取cookie都是在api的域名下。</p>
+<h5 id="1、cors漏洞"><a href="#1、cors漏洞" class="headerlink" title="1、cors漏洞"></a>1、cors漏洞</h5><p>设置了跨域cookie读取设置之后，api就可以被任何域名的服务器访问，这就产生了和JSONP漏洞类似的安全问题，解决办法和之前的类似。</p>
+<h5 id="2、cors漏洞的防御"><a href="#2、cors漏洞的防御" class="headerlink" title="2、cors漏洞的防御"></a>2、cors漏洞的防御</h5><p>[1]Access-Control-Allow-Origin允许跨域的严格正确设置。<br>[2]个人觉得生成一套两个匹配的的标识，一个叫做token1吧保存在http only的cookie，一个token2保存在js可读取位置，所有的请求带上token2，服务端接收到请求之后比对token1和token2是否匹配，匹配接受请求。<br>这样的话既防御了XSS攻击获取cookie，又防御今天讲的这三种攻击。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/06/19/相对稳定的浏览器指纹列表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -924,7 +1058,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

