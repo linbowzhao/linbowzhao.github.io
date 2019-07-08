@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="js发电站,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="WebRTC，名称源自网页即时通信（英语：Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的API。它于2011年6月1日开源并在Google、Mozilla、Opera支持下被纳入万维网联盟的W3C推荐标准。 https://zh.wikipedia.org/wiki/WebRTC 这两个文件可以在同一个浏览器打开，也可以下载本地代码">
+<meta name="keywords" content="js发电站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebRTC(浏览器点对点视频)简介">
+<meta property="og:url" content="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/index.html">
+<meta property="og:site_name" content="Linbow&#39;blog">
+<meta property="og:description" content="WebRTC，名称源自网页即时通信（英语：Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的API。它于2011年6月1日开源并在Google、Mozilla、Opera支持下被纳入万维网联盟的W3C推荐标准。 https://zh.wikipedia.org/wiki/WebRTC 这两个文件可以在同一个浏览器打开，也可以下载本地代码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/img1.jpg">
+<meta property="og:updated_time" content="2019-07-08T12:11:55.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WebRTC(浏览器点对点视频)简介">
+<meta name="twitter:description" content="WebRTC，名称源自网页即时通信（英语：Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的API。它于2011年6月1日开源并在Google、Mozilla、Opera支持下被纳入万维网联盟的W3C推荐标准。 https://zh.wikipedia.org/wiki/WebRTC 这两个文件可以在同一个浏览器打开，也可以下载本地代码">
+<meta name="twitter:image" content="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/img1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/">
+
+
+
+
+
+  <title>WebRTC(浏览器点对点视频)简介 | Linbow'blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dd9a9a4e26c4e090a137cf41c8a8e4c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Linbow'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linbow">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linbow'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WebRTC(浏览器点对点视频)简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-08T20:11:55+08:00">
+                2019-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote><p>WebRTC，名称源自网页即时通信（英语：Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的API。它于2011年6月1日开源并在Google、Mozilla、Opera支持下被纳入万维网联盟的W3C推荐标准。</p>
+<footer><strong>https://zh.wikipedia.org/wiki/WebRTC</strong></footer></blockquote>
+<p>这两个文件可以在同一个浏览器打开，也可以下载本地代码到本地调式，需要打开摄像头<br><a href="/2019/07/08/WebRTC-浏览器点对点视频-简介/offer.html" title="offer.html">offer.html</a>    <a href="/2019/07/08/WebRTC-浏览器点对点视频-简介/answer.html" title="answer.html">answer.html</a></p>
+<h4 id="一、代码解析"><a href="#一、代码解析" class="headerlink" title="一、代码解析"></a>一、代码解析</h4><p>总之，WebRTC对于程序员来说就是浏览器的api接口给我们调用，可以让我们在没有中间服务器的情况下进行点对点视频连接，我大致介绍一下这些api接口和相关的一些信息。<br>先来介绍一下offer.html里的代码</p>
+<h5 id="1、navigator-mediaDevices-getUserMedia-或者-navigator-getUserMedia"><a href="#1、navigator-mediaDevices-getUserMedia-或者-navigator-getUserMedia" class="headerlink" title="1、navigator.mediaDevices.getUserMedia() 或者 navigator.getUserMedia()"></a>1、navigator.mediaDevices.getUserMedia() 或者 navigator.getUserMedia()</h5><p>这两个都是一样的api，只是浏览器推荐使用第一个接口，第二个只是为了兼容老版本，已经逐渐在废弃。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">navigator.getUserMedia(&#123;</span><br><span class="line">    audio: false,     // 关闭麦克风</span><br><span class="line">    video: true,      // 打开摄像头</span><br><span class="line">&#125;, callback, onerror) // 对应的处理函数</span><br></pre></td></tr></table></figure><br>这里会把媒体流数据MediaStream传进callback供我们后续的传输。</p>
+<h5 id="2、RTCPeerConnection-offer"><a href="#2、RTCPeerConnection-offer" class="headerlink" title="2、RTCPeerConnection(offer)"></a>2、RTCPeerConnection(offer)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 这里也可以传入设置，offer是关于stun服务器和turn服务器等一些相关的信息。</span><br><span class="line">var offerer = new RTCPeerConnection()</span><br></pre></td></tr></table></figure>
+<p>新建一个一个由本地计算机到远端的WebRTC连接。该接口提供了创建，保持，监控，关闭连接的方法的实现。</p>
+<h5 id="3、addStream-MediaStream"><a href="#3、addStream-MediaStream" class="headerlink" title="3、addStream(MediaStream)"></a>3、addStream(MediaStream)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">offerer.addStream(MediaStream)</span><br></pre></td></tr></table></figure>
+<p>把1中媒体流数据MediaStream传入WebRTC连接中。</p>
+<h5 id="4、createOffer-MediaStream"><a href="#4、createOffer-MediaStream" class="headerlink" title="4、createOffer(MediaStream)"></a>4、createOffer(MediaStream)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">offerer.createOffer(function (offer) &#123;</span><br><span class="line">    offerer.setLocalDescription(offer)</span><br><span class="line">    sendToP2(&#123;</span><br><span class="line">        &apos;action&apos; : &apos;create&apos;,</span><br><span class="line">        &apos;offer&apos;:offer</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&#125;, function() &#123;&#125;) // 成功和失败回调</span><br></pre></td></tr></table></figure>
+<p>setLocalDescription()方法更改与连接关联的本地信息<br>创建一个服务器，用sendToP2方法给客户端answer.html发送服务端消息，服务端ip和操作等，这里sendToP2方法是为了方便理解，利用浏览器标签之间的通信来传递消息，告诉客户端怎么连接服务器。</p>
+<h5 id="5、addStream-MediaStream"><a href="#5、addStream-MediaStream" class="headerlink" title="5、addStream(MediaStream)"></a>5、addStream(MediaStream)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function receiveMessage(data)&#123;</span><br><span class="line">    data = JSON.parse(data.data)</span><br><span class="line">    switch ( data.action) &#123;</span><br><span class="line">        case &apos;answer&apos; :</span><br><span class="line">            // 设置连接的属性，例如对端使用的解码器等信息</span><br><span class="line">            offerer.setRemoteDescription(new RTCSessionDescription(data.answer))</span><br><span class="line">            break</span><br><span class="line">        case &quot;candidate&quot;:</span><br><span class="line">            // 接收到一个从远端页面通过信号通道发来的新的 ICE 候选地址信息，接收完才正式建立连接</span><br><span class="line">            offerer.addIceCandidate(new RTCIceCandidate(data.candidate))</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    console.log(&apos;msg&apos; ,data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当接受到客户端传递过来的信息的时候，进行对应的设置。</p>
+<p>然后是客服端answer.html</p>
+<h5 id="6、onaddstream-event"><a href="#6、onaddstream-event" class="headerlink" title="6、onaddstream(event)"></a>6、onaddstream(event)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var answerer = new RTCPeerConnection()</span><br><span class="line">var offererToAnswerer = document.getElementById(&apos;video&apos;);</span><br><span class="line">answerer.onaddstream = function (event) &#123;</span><br><span class="line">    console.log(event.stream);</span><br><span class="line">    offererToAnswerer.srcObject = event.stream;</span><br><span class="line">    offererToAnswerer.play();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里绑定客户端接收到请求之后的事件，把接受到信息填入video标签里显示</p>
+<h5 id="7、onicecandidate-event"><a href="#7、onicecandidate-event" class="headerlink" title="7、onicecandidate(event)"></a>7、onicecandidate(event)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">answerer.onicecandidate = function (event) &#123;</span><br><span class="line">    if (!event || !event.candidate) return;</span><br><span class="line">    sendToP1(&#123;</span><br><span class="line">        &apos;action&apos; : &apos;candidate&apos;,</span><br><span class="line">        &apos;candidate&apos; :event.candidate</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>绑定传递ICE 候选地址信息的函数，调用createAnswer后会被执行，sendToP1发送本机候选地址信息给服务端</p>
+<h5 id="8、setRemoteDescription-event"><a href="#8、setRemoteDescription-event" class="headerlink" title="8、setRemoteDescription(event)"></a>8、setRemoteDescription(event)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">answerer.createAnswer(function (answer) &#123;</span><br><span class="line">    answerer.setLocalDescription(answer);</span><br><span class="line">    sendToP1(&#123;</span><br><span class="line">        &apos;action&apos; : &apos;answer&apos; ,</span><br><span class="line">        &apos;answer&apos; : answer</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;, function() &#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>把服务端发送过来的信息传入，建立连接，发送设置信息给服务端，供服务端完成设置连接的属性设置，例如对端使用的解码器等信息</p>
+<h4 id="二、关于WebRTC的一些原理和术语"><a href="#二、关于WebRTC的一些原理和术语" class="headerlink" title="二、关于WebRTC的一些原理和术语"></a>二、关于WebRTC的一些原理和术语</h4><h5 id="1、WebRTC使用的协议"><a href="#1、WebRTC使用的协议" class="headerlink" title="1、WebRTC使用的协议"></a>1、WebRTC使用的协议</h5><p>该图引自《web性能权威指南》，如有侵权，立马删掉。<br><img src="/2019/07/08/WebRTC-浏览器点对点视频-简介/img1.jpg"><br>本文的例子其实是模仿的左边的TCP连接上的通信方式，只是为了方便把WebSocket信令服务器换成了浏览器间的标签通信，TCP当传输层协议比较可靠，但是容易造成延迟。<br>为了而视频直播，一般要考虑速度问题，业务中一般会选择UDP通信方式，UDP则正好相反，它只负责有什么消息我就传过去，不负责安全，不负责有没有到达，不负责交付顺序，所以速度比较快，这里从底层来看是满足WebRTC的需求的。</p>
+<h5 id="2、信令服务器"><a href="#2、信令服务器" class="headerlink" title="2、信令服务器"></a>2、信令服务器</h5><p>在TCP的方式中，信令服务器指WebSocket，在UDP方式中，指DataChannel。<br>这不是用来做视频数据流的中间桥接的，只是用来做给两个通信的浏览器之间做信息桥接的，用来传递用户数据和浏览器之间的ip信息，用来建立连接。</p>
+<h5 id="3、ice-stun和turn服务器"><a href="#3、ice-stun和turn服务器" class="headerlink" title="3、ice,stun和turn服务器"></a>3、ice,stun和turn服务器</h5><p>stun和turn服务器是用来做内网穿透的，要理解这个内外穿透，我们先要了解NAT网关。<br>由于ipv4地址的稀缺和互联网用户的激增，为了解决这个问题，诞生了NAT网关，大概就是一个网关是一个ipv4地址，比如你们公司的网关，然后公司内部的设备分配的是内网的地址，这样解决ipv4地址不够用的情况。但是严重削弱了ip端对端的通信能力，内网里的设备只能通过网关访问外网。<br>也就没法实现浏览器之间端对端通信了，这时候就需要ice,stun和turn服务器来解决这个问题了。这是三种不同的方式吧，具体怎么操作我就不太清楚了。</p>
+<h5 id="4、WebRTC泄露真实IP"><a href="#4、WebRTC泄露真实IP" class="headerlink" title="4、WebRTC泄露真实IP"></a>4、WebRTC泄露真实IP</h5><p>由于WebRTC的端对端通信，其会泄露真实IP，ice,stun和turn服务器的存在使得防火墙和代理也失去作用。</p>
+<h5 id="5、DataChannel"><a href="#5、DataChannel" class="headerlink" title="5、DataChannel"></a>5、DataChannel</h5><p>除了传输音频和视频数据，WebRTC 还支持通过 DataChannel API 在端到端之间传 输任意应用数据。DataChannel 依赖于 SCTP(Stream Control Transmission Protocol，流控制传输协议)，而 SCTP 在两端之间建立的 DTLS 信道之上运行的。<br>DataChannel api调用和WebSocket类似。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright" style="border-left: 3px solid #222;">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Linbow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/" title="WebRTC(浏览器点对点视频)简介">https://linbowzhao.github.io/2019/07/08/WebRTC-浏览器点对点视频-简介/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    作者拥有版权，请注明出处转载。
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js发电站/" rel="tag"># js发电站</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/27/web开发安全/" rel="next" title="web开发安全">
+                <i class="fa fa-chevron-left"></i> web开发安全
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Linbow</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、代码解析"><span class="nav-number">1.</span> <span class="nav-text">一、代码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、navigator-mediaDevices-getUserMedia-或者-navigator-getUserMedia"><span class="nav-number">1.1.</span> <span class="nav-text">1、navigator.mediaDevices.getUserMedia() 或者 navigator.getUserMedia()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、RTCPeerConnection-offer"><span class="nav-number">1.2.</span> <span class="nav-text">2、RTCPeerConnection(offer)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、addStream-MediaStream"><span class="nav-number">1.3.</span> <span class="nav-text">3、addStream(MediaStream)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、createOffer-MediaStream"><span class="nav-number">1.4.</span> <span class="nav-text">4、createOffer(MediaStream)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5、addStream-MediaStream"><span class="nav-number">1.5.</span> <span class="nav-text">5、addStream(MediaStream)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6、onaddstream-event"><span class="nav-number">1.6.</span> <span class="nav-text">6、onaddstream(event)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7、onicecandidate-event"><span class="nav-number">1.7.</span> <span class="nav-text">7、onicecandidate(event)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8、setRemoteDescription-event"><span class="nav-number">1.8.</span> <span class="nav-text">8、setRemoteDescription(event)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、关于WebRTC的一些原理和术语"><span class="nav-number">2.</span> <span class="nav-text">二、关于WebRTC的一些原理和术语</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、WebRTC使用的协议"><span class="nav-number">2.1.</span> <span class="nav-text">1、WebRTC使用的协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、信令服务器"><span class="nav-number">2.2.</span> <span class="nav-text">2、信令服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、ice-stun和turn服务器"><span class="nav-number">2.3.</span> <span class="nav-text">3、ice,stun和turn服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、WebRTC泄露真实IP"><span class="nav-number">2.4.</span> <span class="nav-text">4、WebRTC泄露真实IP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5、DataChannel"><span class="nav-number">2.5.</span> <span class="nav-text">5、DataChannel</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Linbow</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

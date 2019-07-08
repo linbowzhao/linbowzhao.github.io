@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+</head>
+<body>
+<div style="text-align:center;">
+    <div class="videos-container">
+        <h2>请允许弹出弹窗，或者手动点开answer.html,这里为了精简代码，只有单向视频，双向视频同样道理。</h2>
+    </div>
+</div>
+<script>
+    var offerer
+        ,answererWin
+    // 兼容处理
+    window.RTCPeerConnection = window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    window.RTCSessionDescription = window.mozRTCSessionDescription || window.RTCSessionDescription;
+    window.RTCIceCandidate = window.mozRTCIceCandidate || window.RTCIceCandidate;
+    navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+</script>
+<script>
+    function offererPeer(video_stream) {
+        // offerer = new RTCPeerConnection({
+        //     iceServers: [{
+        //         "url": "stun:stun.com" // stun服务器信息
+        //     }, {                       // turn服务器信息
+        //         "url": "turn:turn.com",
+        //         "username": "user1",
+        //         "credential": "asfasfd"
+        //     }]
+        // })
+        offerer = new RTCPeerConnection()
+        offerer.addStream(video_stream)
+        offerer.createOffer(function (offer) {
+            offerer.setLocalDescription(offer)
+            sendToP2({
+                'action' : 'create',
+                'offer':offer
+            })
+
+        }, function() {})
+    }
+</script>
+<script>
+    function getUserMedia(callback) {
+        navigator.getUserMedia({
+            audio: false,
+            video: true,
+        }, callback, onerror)
+
+        function onerror(e) {
+            alert(JSON.stringify(e, null, '\t'))
+        }
+    }
+</script>
+<script>
+    // 这里利用浏览器标签通信来做信托服务器，一般是要建信托服务器的，用来给两个客户端之间传递信息，传递的信息一般有ip和用户信息等连接信息，用来建立连接
+    function sendToP2(data){
+        answererWin.postMessage(JSON.stringify(data) ,window.location)
+    }
+
+    function receiveMessage(data){
+        data = JSON.parse(data.data)
+        switch ( data.action) {
+            case 'answer' :
+                // 设置连接的属性，例如对端使用的解码器等信息
+                offerer.setRemoteDescription(new RTCSessionDescription(data.answer))
+                break
+            case "candidate":
+                // 接收到一个从远端页面通过信号通道发来的新的 ICE 候选地址信息，接收完才正式建立连接
+                offerer.addIceCandidate(new RTCIceCandidate(data.candidate))
+                break
+
+        }
+        console.log('msg' ,data)
+    }
+
+    window.addEventListener("message", receiveMessage, false)
+    answererWin = window.open('answer.html' ,'t')
+    getUserMedia(function (video_stream) {
+        offererPeer(video_stream)
+    });
+</script>
+
+</body>
+
+</html>

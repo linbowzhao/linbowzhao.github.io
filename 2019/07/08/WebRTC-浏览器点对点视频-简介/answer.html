@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html id="home" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+</head>
+
+<body>
+<article>
+    <div style="text-align:center;">
+        <div class="videos-container">
+            <video id="video" autoplay controls></video>
+            <h2>此页面刷新之后，必须重新刷新一下Offer页面</h2>
+        </div>
+    </div>
+    <script>
+        var answerer;
+        var offererToAnswerer = document.getElementById('video');
+        // 兼容处理
+        window.RTCPeerConnection = window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+        window.RTCSessionDescription = window.mozRTCSessionDescription || window.RTCSessionDescription;
+        window.RTCIceCandidate = window.mozRTCIceCandidate || window.RTCIceCandidate;
+        navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+    </script>
+    <script>
+        /* answerer */
+        function answererPeer(offer) {
+            // offerer = new RTCPeerConnection({
+            //     iceServers: [{
+            //         "url": "stun:stun.com" // stun服务器信息
+            //     }, {                       // turn服务器信息
+            //         "url": "turn:turn.com",
+            //         "username": "user1",
+            //         "credential": "asfasfd"
+            //     }]
+            // })
+            answerer = new RTCPeerConnection()
+            // 接收视频流之后开始播放
+            answerer.onaddstream = function (event) {
+                console.log(event.stream);
+                offererToAnswerer.srcObject = event.stream;
+                offererToAnswerer.play();
+            };
+
+            // 发送本机ip地址给服务器
+            answerer.onicecandidate = function (event) {
+                if (!event || !event.candidate) return;
+                sendToP1({
+                    'action' : 'candidate',
+                    'candidate' :event.candidate
+                })
+            };
+
+            // 设置连接的属性，例如对端使用的解码器等信息，发送给服务端
+            answerer.setRemoteDescription(new RTCSessionDescription(offer));
+            // 创建连接
+            answerer.createAnswer(function (answer) {
+                answerer.setLocalDescription(answer);
+                sendToP1({
+                    'action' : 'answer' ,
+                    'answer' : answer
+                })
+            }, function() {});
+        }
+    </script>
+    <script>
+        // 这里利用浏览器标签通信来做信托服务器，一般是要建信托服务器的，用来给两个客户端之间传递信息，传递的信息一般有ip和用户信息等连接信息，用来建立连接
+        function receiveMessage(data){
+            data = JSON.parse(data.data)
+            console.log(data)
+            if(data.action === 'create'){
+                answererPeer(data.offer , data.stream)
+            }
+        }
+        window.addEventListener("message", receiveMessage, false)
+
+        function sendToP1(data) {
+            opener.postMessage(JSON.stringify(data) , window.location)
+        }
+    </script>
+
+
+</article>
+
+
+
+</body>
+
+</html>
