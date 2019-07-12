@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>外边距塌陷</title>
+    <style>
+        .child {
+            width: 50px;
+            height: 50px;
+            background: red;
+            float: left;
+        }
+        .float-out {
+            width: 50px;
+            height: 100px;
+            background: green;
+            float: left;
+        }
+        .father {
+            background: yellow;
+            /*overflow: auto;*/
+        }
+        .clearfix:after{
+            content: "020";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="float-out">外浮动元素</div>
+<div class="father clearfix">
+    父元素内容
+    <div class="child">浮动元素</div>
+</div>
+</body>
+</html>

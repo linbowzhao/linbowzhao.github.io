@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>清除浮动</title>
+    <style>
+        .child {
+            float: left;
+            width: 50px;
+            height: 50px;
+            background: red;
+        }
+        .father {
+            background: yellow;
+            /*overflow: auto;*/
+        }
+    </style>
+</head>
+<body>
+<div class="father">
+    父元素内容
+    <div class="child">浮动元素</div>
+</div>
+</body>
+</html>

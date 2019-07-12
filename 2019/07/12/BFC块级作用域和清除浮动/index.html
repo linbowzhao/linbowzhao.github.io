@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="css研究所,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、BFC的定义块格式化上下文（Block Formatting Context，BFC） 是Web页面的可视化CSS渲染的一部分，是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。怎么理解呢，就是一个BFC其实就是自成一块的布局区域，在这块区域里的浮动元素会相互影响，外边距折叠(后面再讲外边距折叠)也只会发生在属于同一BFC的块级元素之间。 二、BFC的作用为什么我们要了解BFC？">
+<meta name="keywords" content="css研究所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BFC块级作用域和清除浮动">
+<meta property="og:url" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/index.html">
+<meta property="og:site_name" content="Linbow&#39;blog">
+<meta property="og:description" content="一、BFC的定义块格式化上下文（Block Formatting Context，BFC） 是Web页面的可视化CSS渲染的一部分，是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。怎么理解呢，就是一个BFC其实就是自成一块的布局区域，在这块区域里的浮动元素会相互影响，外边距折叠(后面再讲外边距折叠)也只会发生在属于同一BFC的块级元素之间。 二、BFC的作用为什么我们要了解BFC？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img1.jpg">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img2.jpg">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img3.jpg">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img4.jpg">
+<meta property="og:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img5.jpg">
+<meta property="og:updated_time" content="2019-07-12T08:22:55.191Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BFC块级作用域和清除浮动">
+<meta name="twitter:description" content="一、BFC的定义块格式化上下文（Block Formatting Context，BFC） 是Web页面的可视化CSS渲染的一部分，是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。怎么理解呢，就是一个BFC其实就是自成一块的布局区域，在这块区域里的浮动元素会相互影响，外边距折叠(后面再讲外边距折叠)也只会发生在属于同一BFC的块级元素之间。 二、BFC的作用为什么我们要了解BFC？">
+<meta name="twitter:image" content="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/img1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/">
+
+
+
+
+
+  <title>BFC块级作用域和清除浮动 | Linbow'blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dd9a9a4e26c4e090a137cf41c8a8e4c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Linbow'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linbow">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linbow'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BFC块级作用域和清除浮动</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T16:22:55+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="一、"><a href="#一、" class="headerlink" title="一、"></a>一、<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context" target="_blank" rel="noopener">BFC的定义</a></h5><p>块格式化上下文（Block Formatting Context，BFC） 是Web页面的可视化CSS渲染的一部分，是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。<br>怎么理解呢，就是一个BFC其实就是自成一块的布局区域，在这块区域里的浮动元素会相互影响，外边距折叠(后面再讲外边距折叠)也只会发生在属于同一BFC的块级元素之间。</p>
+<h5 id="二、BFC的作用"><a href="#二、BFC的作用" class="headerlink" title="二、BFC的作用"></a>二、BFC的作用</h5><p>为什么我们要了解BFC？当使用浮动元素的时候，有时候会出现非我们预期的现象，这时候很可能是对BFC的理解不到位，出现了非目标布局的BFC，了解BFC有助于我们对元素进行正确的布局。</p>
+<h5 id="三、BFC的详解"><a href="#三、BFC的详解" class="headerlink" title="三、BFC的详解"></a>三、BFC的详解</h5><p>1、创建BFC的方式</p>
+<ul>
+<li>根元素或包含根元素的元素，根元素默认就是一个BFC</li>
+<li>浮动元素（元素的 float 不是 none）</li>
+<li>绝对定位元素（元素的 position 为 absolute 或 fixed</li>
+<li>行内块元素（元素的 display 为 inline-block）</li>
+<li>表格单元格（元素的 display为 table-cell，HTML表格单元格默认为该值）</li>
+<li>表格标题（元素的 display 为 table-caption，HTML表格标题默认为该值）</li>
+<li>匿名表格单元格元素（元素的 display为 table、table-row、 table-row-group、table-header-group、table-footer-group（分别是HTML table、row、tbody、thead、tfoot的默认属性）或 inline-table）</li>
+<li>overflow 值不为 visible 的块元素</li>
+<li>display 值为 flow-root 的元素</li>
+<li>contain 值为 layout、content或 strict 的元素</li>
+<li>弹性元素（display为 flex 或 inline-flex元素的直接子元素）</li>
+<li>网格元素（display为 grid 或 inline-grid 元素的直接子元素）</li>
+<li>多列容器（元素的 column-count 或 column-width 不为 auto，包括 column-count 为 1）</li>
+<li>column-span 为 all 的元素始终会创建一个新的BFC，即使该元素没有包裹在一个多列容器中（标准变更，Chrome bug）。<br>2、BFC范例<br>利用BFC清除浮动<br>BFC是一种用来清除浮动的方式，不过这种方式会导致父元素变成一个BFC导致父元素布局发生较大变化，一般情况下，我们用clear:both来清除浮动，而不用这种方式。<a href="/2019/07/12/BFC块级作用域和清除浮动/demo1.html" title="demo1.html">demo1.html</a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .child &#123;</span><br><span class="line">        float: left;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 50px;</span><br><span class="line">        background: red;</span><br><span class="line">    &#125;</span><br><span class="line">    .father &#123;</span><br><span class="line">        background: yellow;</span><br><span class="line">        /*overflow: auto;*/</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;div class=&quot;father&quot;&gt;</span><br><span class="line">    父元素内容</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;浮动元素&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<img src="/2019/07/12/BFC块级作用域和清除浮动/img1.jpg">
+<p>子元素child设置浮动会浮动到上一层的BFC中，上图中father块没有设置overflow: auto，其不是一个BFC，child会浮动到最靠近他的BFC夫块中，图1是html中，所以父元素father没有被撑起来。<br>当给子元素设置了overflow: auto时，父元素father是一个BFC，子元素child即使浮动，也是浮动到father中，所以仍然能把father撑开，如下图。而不建议这种写法是因为有时候，我们不需要出现滚动条，这么设置了如果内容超出就会出现滚动条，对我们布局有影响，所以还是更通用性的clear:both适合用来清除浮动。<br><img src="/2019/07/12/BFC块级作用域和清除浮动/img2.jpg"><br>利用BFC防止外边距塌陷<br>外边距塌陷是两个相邻的元素之间外边距会重叠的现象，父子和兄弟元素都有这种现象。<br><a href="/2019/07/12/BFC块级作用域和清除浮动/demo2.html" title="demo2.html">demo2.html</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .child &#123;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 50px;</span><br><span class="line">        background: red;</span><br><span class="line">        margin-top: 50px;</span><br><span class="line">    &#125;</span><br><span class="line">    .father &#123;</span><br><span class="line">        margin-top: 50px;</span><br><span class="line">        background: yellow;</span><br><span class="line">        /*overflow: auto;*/</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;div class=&quot;father&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;浮动元素&lt;/div&gt;</span><br><span class="line">    父元素内容</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><img src="/2019/07/12/BFC块级作用域和清除浮动/img3.jpg"><br>对父元素设置overflow: auto之后，父元素成为一个BFC，不会和子元素外边距重叠，也不会和其它BFC内的元素发生外边距重叠。<br><img src="/2019/07/12/BFC块级作用域和清除浮动/img4.jpg"></p>
+<p>clear:both消除浮动导致的意外情况<br>这也是我最开始研究浮动和BFC的原因，当时布局的时候，发现有一个元素的高度老是和导航栏一样高，导航栏明明在这个元素外面，而且隔着八竿子打不着没关系的元素，简化后大概就是这个模型。<br><a href="/2019/07/12/BFC块级作用域和清除浮动/demo3.html" title="demo3.html">demo3.html</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .child &#123;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 50px;</span><br><span class="line">        background: red;</span><br><span class="line">        float: left;</span><br><span class="line">    &#125;</span><br><span class="line">    .float-out &#123;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background: green;</span><br><span class="line">        float: left;</span><br><span class="line">    &#125;</span><br><span class="line">    .father &#123;</span><br><span class="line">        background: yellow;</span><br><span class="line">        /*overflow: auto;*/</span><br><span class="line">    &#125;</span><br><span class="line">    .clearfix:after&#123;</span><br><span class="line">        content: &quot;020&quot;;</span><br><span class="line">        display: block;</span><br><span class="line">        height: 0;</span><br><span class="line">        clear: both;</span><br><span class="line">        visibility: hidden;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;div class=&quot;float-out&quot;&gt;外浮动元素&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;father clearfix&quot;&gt;</span><br><span class="line">    父元素内容</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;浮动元素&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br>外浮动元素float-out就是我遇到的导航栏，明明在father外面，为什么会影响到father的高度呢？原因就是这个清除浮动clearfix的伪元素,clear:both会在当前BFC中不允许两侧出现浮动元素，而因为father不是一个BFC，所以结算位置是在html这个更外层的BFC中，浮动元素是脱离文档流的，所以这个伪元素会在float-out这个同BFC中的最高浮动元素下面，导致把father撑开和float-out同一高度，这个特性有时候是优点有时候是缺点吧主要看需求，不想要father受到float-out的影响的话，只要把father变成一个BFC即可，在给father添加overflow: auto，可以发现问题解决了。</p>
+<img src="/2019/07/12/BFC块级作用域和清除浮动/img5.jpg">
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright" style="border-left: 3px solid #222;">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Linbow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/" title="BFC块级作用域和清除浮动">https://linbowzhao.github.io/2019/07/12/BFC块级作用域和清除浮动/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    作者拥有版权，请注明出处转载。
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css研究所/" rel="tag"># css研究所</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/08/WebRTC-浏览器点对点视频-简介/" rel="next" title="WebRTC(浏览器点对点视频)简介">
+                <i class="fa fa-chevron-left"></i> WebRTC(浏览器点对点视频)简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Linbow</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、"><span class="nav-number">1.</span> <span class="nav-text">一、BFC的定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、BFC的作用"><span class="nav-number">2.</span> <span class="nav-text">二、BFC的作用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、BFC的详解"><span class="nav-number">3.</span> <span class="nav-text">三、BFC的详解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Linbow</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
