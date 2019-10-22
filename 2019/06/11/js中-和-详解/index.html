@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://linbowzhao.github.io/2019/06/11/js中-和-详解/p3.png">
 <meta property="og:image" content="https://linbowzhao.github.io/2019/06/11/js中-和-详解/p4.png">
 <meta property="og:image" content="https://linbowzhao.github.io/2019/06/11/js中-和-详解/p5.png">
-<meta property="og:updated_time" content="2019-06-28T06:42:12.566Z">
+<meta property="og:updated_time" content="2019-08-19T07:43:22.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js中==和===详解">
 <meta name="twitter:description" content="非原创，仅转载保存，原文链接， 大家知道，==是JavaScript中比较复杂的一个运算符。它的运算规则奇怪，容易让人犯错，从而成为JavaScript中“最糟糕的特性”之一。在仔细阅读了ECMAScript规范的基础上，我画了一张图，我想通过它你会彻底地搞清楚关于==的一切。同时，我也试图通过此文向大家证明==并不是那么糟糕的东西，它很容易掌握，甚至看起来很合理。先上图：图1 ==运算规则的图形">
@@ -143,7 +143,7 @@
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?dd9a9a4e26c4e090a137cf41c8a8e4c6";
+      hm.src = "https://hm.baidu.com/hm.js?56e9aa894c7cb6c5eba4aa0b087b8147";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
@@ -335,6 +335,7 @@
 <h2 id="五-单纯与复杂"><a href="#五-单纯与复杂" class="headerlink" title="五. 单纯与复杂"></a>五. 单纯与复杂</h2><p>原始类型是一种单纯的类型，它们直接了当、容易理解。然而缺点是表达能力有限，难以扩展，所以就有了对象。对象是属性的集合，而属性本身又可以是对象。所以对象可以被构造得任意复杂，足以表示各种各样的事物。<br>但是，有时候事情复杂了也不是好事。比如一篇冗长的论文，并不是每个人都有时间、有耐心或有必要从头到尾读一遍，通常只了解其中心思想就够了。于是论文就有了关键字、概述。JavaScript中的对象也一样，我们需要有一种手段了解它的主要特征，于是对象就有了toString()和valueOf()方法。<br>toString()方法用来得到对象的一段文字描述；而valueOf()方法用来得到对象的特征值。<br>当然，这只是我自己的理解。顾名思义，toString()方法倾向于返回一个字符串。那么valueOf()方法呢？根据规范中的描述，它倾向于返回一个数字——尽管内置类型中，valueOf()方法返回数字的只有Number和Date。<br>根据图1，当一个对象与一个非对象比较时，需要将对象转化为原始类型(虽然与布尔类型比较时，需要先将布尔类型变成数字类型，但是接下来还是要将对象类型变成原始类型)。这也是合理的，毕竟==是不严格的相等比较，我们只需要取出对象的主要特征来参与运算，次要特征放在一边就行了。</p>
 <h2 id="六-万物皆数"><a href="#六-万物皆数" class="headerlink" title="六. 万物皆数"></a>六. 万物皆数</h2><p>我们回过头来看一下图1。里面标有N或P的那几条连线是没有方向的。假如我们在这些线上标上箭头，使得连线从标有N或P的那一端指向另一端，那么会得到(不考虑undefined和null)：<br><img src="/2019/06/11/js中-和-详解/p2.png"><br>图2 ==运算过程中类型转化的趋势<br>发现什么了吗？对，在运算过程中，所有类型的值都有一种向数字类型转化的趋势。毕竟曾经有名言曰：<br>万物皆数。</p>
 <h2 id="七-举个栗子"><a href="#七-举个栗子" class="headerlink" title="七. 举个栗子"></a>七. 举个栗子</h2><p>前面废话太多了，这里还是举个例子，来证明图1确实是方便有效可以指导实践的。<br>例，计算下面表达式的值：<br>[‘’] == false<br>首先，两个操作数分别是对象类型、布尔类型。根据图1，需要将布尔类型转为数字类型，而false转为数字的结果是0，所以表达式变为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&apos;&apos;] == 0</span><br></pre></td></tr></table></figure><br>两个操作数变成了对象类型、数字类型。根据图1，需要将对象类型转为原始类型：<br>首先调用[].valueOf()，由于数组的valueOf()方法返回自身，所以结果不是原始类型，继续调用[].toString()。<br>对于数组来说，toString()方法的算法，是将每个元素都转为字符串类型，然后用逗号’,’依次连接起来，所以最终结果是空字符串’’，它是一个原始类型的值。<br>此时，表达式变为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;&apos; == 0</span><br></pre></td></tr></table></figure><br>两个操作数变成了字符串类型、数字类型。根据图1，需要将字符串类型转为数字类型，前面说了空字符串变成数字是0。于是表达式变为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 == 0</span><br></pre></td></tr></table></figure><br>到此为止，两个操作数的类型终于相同了，结果明显是true。<br>从这个例子可以看出，要想掌握==运算的规则，除了牢记图1外，还需要记住那些内置对象的toString()和valueOf()方法的规则。包括Object、Array、Date、Number、String、Boolean等，幸好这没有什么难度。</p>
+<p>这里我个人再举几个容易混淆得例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!null == true  // true</span><br><span class="line">null == true   // false</span><br><span class="line">null == false  // false</span><br></pre></td></tr></table></figure><br>这里!null == true是正确得，而null == false确是错误得，按照上面的解释是null处于不存在得区域内，与存在区域内任何类型不相等,但是!null == true为什么就正确呢，原因是!也会对类型进行转化,！对null转化为了boolean类型，也就是true。</p>
 <h2 id="八-再次变形"><a href="#八-再次变形" class="headerlink" title="八. 再次变形"></a>八. 再次变形</h2><p>其实，图一还不够完美。为什么呢？因为对象与字符串/数字比较时都由对象来转型，但是与同样是原始类型的布尔类型比较时却需要布尔类型转型。实际上，只要稍稍分析一下，全部让对象来转为原始类型也是等价的。所以我们得到了最终的更加完美的图形：<br><img src="/2019/06/11/js中-和-详解/p3.png"><br>图3 更完美的==运算规则的图形化表示<br>有一个地方可能让你疑惑：为什么Boolean与String之间标了两个N？虽然按照规则应该是由Boolean转为数字，但是下一步String就要转为数字了，所以干脆不如两边同时转成数字。</p>
 <h2 id="九-再次变形"><a href="#九-再次变形" class="headerlink" title="九. 再次变形"></a>九. 再次变形</h2><p>前面说得很乱，根据我们得到的最终的图3，我们总结一下==运算的规则：<br>undefined == null，结果是true。且它俩与所有其他值比较的结果都是false。<br>String == Boolean，需要两个操作数同时转为Number。<br>String/Boolean == Number，需要String/Boolean转为Number。<br>Object == Primitive，需要Object转为Primitive(具体通过valueOf和toString方法)。<br>瞧见没有，一共只有4条规则！是不是很清晰、很简单。<br>最后，我需要@一下@Belleve大神，为什么呢？因为整篇文章的思考，都是在看到他在<a href="https://www.zhihu.com/question/31442029中的回答后做出的。当时他贴了一张图：" target="_blank" rel="noopener">https://www.zhihu.com/question/31442029中的回答后做出的。当时他贴了一张图：</a><br><img src="/2019/06/11/js中-和-详解/p4.png"><br>我看后觉得太复杂了，于是想能不能用一种更简单的方式来描述一下==运算，使大家更清晰更容易掌握。于是就有了此文，当然我不知道自己成功了没有。<br>OK，结束了。文章中的谬误，请不吝指出。<br>PS：最后，把图改了一下，仅供娱乐 : )<br><img src="/2019/06/11/js中-和-详解/p5.png"></p>
 
