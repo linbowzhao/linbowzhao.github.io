@@ -1,0 +1,68 @@
+<svg id="bg-music-btn-svg" viewBox="0 0 270 200" xmlns="http://www.w3.org/2000/svg">
+    <desc>music</desc>
+    <line style="stroke:rgba(220,166,103,1);stroke-width:30;" stroke-linecap="round"
+          x1="15" y1="100" x2="15" y2="100">
+        <animate attributeType="css" attributeName="y1" repeatCount="indefinite"
+                 begin="0s" dur="0.9s"
+                 values="100;10;100;100;"/>
+        <animate attributeType="css" attributeName="y2" repeatCount="indefinite"
+                 begin="0s" dur="0.9s"
+                 values="100;190;100;100;"/>
+    </line>
+    <line style="stroke:rgba(220,166,103,1);stroke-width:30" stroke-linecap="round"
+          x1="75" y1="100" x2="75" y2="100">
+        <animate attributeType="css" attributeName="y1" repeatCount="indefinite"
+                 begin="0.2s" dur="0.9s"
+                 values="100;10;100;100;"/>
+        <animate attributeType="css" attributeName="y2" repeatCount="indefinite"
+                 begin="0.2s" dur="0.9s"
+                 values="100;190;100;100;"/>
+    </line>
+    <line style="stroke:rgba(220,166,103,1);stroke-width:30" stroke-linecap="round"
+          x1="135" y1="100" x2="135" y2="100">
+        <animate attributeType="css" attributeName="y1" repeatCount="indefinite"
+                 begin="0.4s" dur="0.9s"
+                 values="100;10;100;100;"/>
+        <animate attributeType="css" attributeName="y2" repeatCount="indefinite"
+                 begin="0.4s" dur="0.9s"
+                 values="100;190;100;100;"/>
+    </line>
+    <line style="stroke:rgba(220,166,103,1);stroke-width:30" stroke-linecap="round"
+          x1="195" y1="100" x2="195" y2="100">
+        <animate attributeType="css" attributeName="y1" repeatCount="indefinite"
+                 begin="0.6s" dur="0.9s"
+                 values="100;10;100;100;"/>
+        <animate attributeType="css" attributeName="y2" repeatCount="indefinite"
+                 begin="0.6s" dur="0.9s"
+                 values="100;190;100;100;"/>
+    </line>
+    <line style="stroke:rgba(220,166,103,1);stroke-width:30" stroke-linecap="round"
+          x1="255" y1="100" x2="255" y2="100">
+        <animate attributeType="css" attributeName="y1" repeatCount="indefinite"
+                 begin="0.8s" dur="0.9s"
+                 values="100;10;100;100;"/>
+        <animate attributeType="css" attributeName="y2" repeatCount="indefinite"
+                 begin="0.8s" dur="0.9s"
+                 values="100;190;100;100;"/>
+    </line>
+    <script type="text/javascript">
+        (function (w, d) {
+            var svg = document.getElementsByTagName("svg")[0];
+            
+            if (!svg) return;
+            
+            svg.unpauseAnimations();
+            
+            function continueAn() {
+                //判断动画是否暂停
+                if (svg.animationsPaused()) {
+                    svg.unpauseAnimations();
+                } else {
+                    svg.pauseAnimations();
+                }
+            }
+            
+            svg.onclick = continueAn;
+        })(window, document);
+    </script>
+</svg>
