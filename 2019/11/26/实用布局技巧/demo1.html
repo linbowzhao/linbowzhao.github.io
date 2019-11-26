@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>不定高垂直居中</title>
+    <style>
+        html, body {
+            overflow: hidden;
+        }
+        .box{
+            display:table-cell;
+            width:150px;
+            height:100px;
+            padding:0 10px;
+            border:1px solid #beceeb;
+            color:#069;
+            vertical-align:middle;
+        }
+        .box span {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: red;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <span style="height: 50px"></span>
+    <span style="height: 70px"></span>
+</div>
+</body>
+</html>

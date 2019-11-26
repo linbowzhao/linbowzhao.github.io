@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <title>两栏自适应</title>
+    <style>
+        html, body {
+            overflow: hidden;
+        }
+        .box{
+            width: 250px;
+            display: inline-block;
+            border:1px solid #beceeb;
+        }
+        .box .text {
+            display:table-cell;
+            *display:inline-block; // 解决ie6，7兼容
+        }
+        .box .img {
+            width: 50px;
+            height: 50px;
+            background: red;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="img"></div>
+    <div class="text">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测</div>
+</div>
+</body>
+</html>
